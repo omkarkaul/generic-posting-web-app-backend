@@ -15,3 +15,9 @@ class Database:
         result = self.cur.fetchall()
 
         return result
+    
+    def get_comments_for_post(self, post):
+        self.cur.execute(f"SELECT comment FROM comments WHERE post_name = {post}")
+        result = self.cur.fetchall()
+
+        return result
