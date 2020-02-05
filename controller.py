@@ -14,6 +14,23 @@ def get_all_posts():
 
     return response
 
+@app.route("/api/comments", methods = ['GET'])
+def get_comments_for_post(post):
+    args = dict(request.args)
+
+    if 'post' in args:
+        post = args['post']
+        print(post)
+        
+        comments = db.get_comments_for_post(post)
+
+        response = make_response(jsonify(comments), 200)
+        response.headers['Content-Type'] = 'application/json'
+
+        return response
+    else:
+        return make_response(("Missing 'post' param!", 400))
+
 # @app.route("/api/posts", methods = ['POST'])
 # def add_post():
 #     args = dict(request.args)
