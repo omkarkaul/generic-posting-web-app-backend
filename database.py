@@ -17,7 +17,30 @@ class Database:
         return result
     
     def get_comments_for_post(self, post):
-        self.cur.execute(f"SELECT comment FROM comments WHERE post_name = {post}")
+        self.cur.execute(f"SELECT comment FROM comments WHERE post_name = '{post}'")
         result = self.cur.fetchall()
 
         return result
+
+    def add_new_post(self, post):
+        try:
+            self.cur.execute(f"INSERT INTO posts (value) values ('{post}')")
+            self.con.commit() # required for committing the query to the db
+
+            return 1 # Successfully posted {post} into the database!
+        except pymysql.MySQLError as e:
+            if e.args[0] == 1062:
+                print('Duplicate entry!')
+                return 2
+
+    def add_new_comment(self, post, comment):
+        try:
+            self.cur.execute(f"INSERT INTO comments (comment, post_name) values ('{comment}', '{post}')")
+            self.con.commit() # required for committing the query to the db
+
+            return 1
+
+        except pymysql.MySQLError as e:
+            if e.args[0] == 1452:
+                print("Provided post_name doesn't exist!")
+                return 2
