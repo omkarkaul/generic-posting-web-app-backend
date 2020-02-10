@@ -10,6 +10,7 @@ def get_all_posts():
 
     response = make_response(jsonify(posts), 200)
     response.headers['Content-Type'] = 'application/json'
+    response.headers.add('Access-Control-Allow-Origin', '*')
 
     return response
 
@@ -24,6 +25,7 @@ def get_comments_for_post():
         
         response = make_response(jsonify(comments), 200)
         response.headers['Content-Type'] = 'application/json'
+        response.headers.add('Access-Control-Allow-Origin', '*')
 
         return response
     else:
