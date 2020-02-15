@@ -26,7 +26,7 @@ class Database:
     def add_new_post(self, post):
         try:
             timestamp = int(time.time())
-            self.cur.execute(f"INSERT INTO posts (value, timestamp) values ('{post}', '{timestamp}')")
+            self.cur.execute(f"INSERT INTO posts (post, timestamp) values ('{post}', '{timestamp}')")
             self.con.commit() # required for committing the query to the db
 
             return 1 # Successfully posted {post} into the database!
