@@ -9,15 +9,24 @@ Dependencies:
 
 ## DB Tables
 
-#### 'Posts' table (SQL: DESCRIBE posts;)
+#### 'posts' table
 | Field     |    Type     | Null | Key | Default |
 |-----------|-------------|------|-----|---------|
 | post      | varchar(255)| NO   |PRI  | NULL    |
-| timestamp | varchar(12) | NO   |     | NULL    | 
+| timestamp | varchar(12) | NO   |     | NULL    |
 
-#### 'Comments table (SQL: DESCRIBE comments;)
+```sql
+CREATE TABLE posts ( post VARCHAR(255) NOT NULL PRIMARY KEY, timestamp VARCHAR(12) NOT NULL );
+```
+
+
+#### 'comments' table
 | Field     |    Type     | Null | Key | Default |
 |-----------|-------------|------|-----|---------|
 | comment   | varchar(512)| NO   | PRI | NULL    |
 | post_name | varchar(255)| NO   | MUL | NULL    |
 | timestamp | varchar(12) | NO   |     | NULL    | 
+
+```sql
+CREATE TABLE comments ( comment VARCHAR(512) NOT NULL PRIMARY KEY, post_name VARCHAR(255) NOT NULL, timestamp VARCHAR(12) NOT NULL, FOREIGN KEY (post_name) REFERENCES posts(post));
+```
