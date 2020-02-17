@@ -1,10 +1,19 @@
 from flask import Flask, request, make_response, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from database import Database
 
 app = Flask(__name__)
 db = Database()
 
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["15 per day"]
+)
+
 @app.route("/api/posts", methods = ['GET'])
+@limiter.limit("3 per minute")
 def get_all_posts():
     posts = db.get_all_posts()
 
@@ -15,6 +24,7 @@ def get_all_posts():
     return response
 
 @app.route("/api/comments", methods = ['GET'])
+@limiter.limit("3 per minute")
 def get_comments_for_post():
     args = dict(request.args)
     print(args)
@@ -32,6 +42,7 @@ def get_comments_for_post():
         return make_response(("Missing 'post' param!", 400))
 
 @app.route("/api/posts", methods = ['POST'])
+@limiter.limit("3 per minute")
 def add_new_post():
     if request.is_json:
         body = request.get_json()
@@ -51,6 +62,7 @@ def add_new_post():
     return make_response(('Bad request!', 400))
 
 @app.route("/api/comments", methods = ['POST'])
+@limiter.limit("3 per minute")
 def add_new_comment():
     args = dict(request.args)
 
@@ -71,6 +83,15 @@ def add_new_comment():
             return make_response((f"Post '{post}' doesn't exist!", 400))
     
     return make_response(("Bad data!", 400))
+
+@app.errorhandler(429)
+def rate_limit_handler(e):
+    response = make_response(jsonify({
+        "error":"too many requests!",
+        "request_frequency_allowed":e.description
+    }), 429)
+    
+    return response
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
