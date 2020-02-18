@@ -1,7 +1,10 @@
+from dotenv import load_dotenv
 from flask import Flask, request, make_response, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from database import Database
+
+load_dotenv()
 
 app = Flask(__name__)
 db = Database()
@@ -9,7 +12,7 @@ db = Database()
 limiter = Limiter(
     app,
     key_func=get_remote_address,
-    default_limits=["15 per day"]
+    default_limits=["100 per day"]
 )
 
 @app.route("/api/posts", methods = ['GET'])
@@ -81,6 +84,8 @@ def add_new_comment():
             return make_response((f"Successfully added comment for post {post}!", 200))
         elif result == 2:
             return make_response((f"Post '{post}' doesn't exist!", 400))
+        elif result == 3:
+            return make_response(("Syntax error!", 400))
     
     return make_response(("Bad data!", 400))
 
