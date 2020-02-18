@@ -1,12 +1,13 @@
+import os
 import pymysql
 import time
 
 class Database:
     def __init__(self):
-        host = '127.0.0.1'
-        user = 'root'
-        password = ''
-        db = 'beating_chester'
+        host = os.getenv('host')
+        user = os.getenv('user')
+        password = os.getenv('password')
+        db = os.getenv('db')
 
         self.con = pymysql.connect(host, user, password, db, cursorclass=pymysql.cursors.DictCursor)
         self.cur = self.con.cursor()
@@ -18,7 +19,7 @@ class Database:
         return result
     
     def get_comments_for_post(self, post):
-        self.cur.execute(f"SELECT comment, timestamp FROM comments WHERE post_name = '{post}' ORDER BY timestamp ASC")
+        self.cur.execute(f"SELECT comment, timestamp FROM comments WHERE post_name = \"{post}\" ORDER BY timestamp ASC")
         result = self.cur.fetchall()
 
         return result
@@ -26,7 +27,7 @@ class Database:
     def add_new_post(self, post):
         try:
             timestamp = int(time.time())
-            self.cur.execute(f"INSERT INTO posts (post, timestamp) values ('{post}', '{timestamp}')")
+            self.cur.execute(f"INSERT INTO posts (post, timestamp) values (\"{post}\", \"{timestamp}\")")
             self.con.commit() # required for committing the query to the db
 
             return 1 # Successfully posted {post} into the database!
@@ -38,7 +39,7 @@ class Database:
     def add_new_comment(self, post, comment):
         try:
             timestamp = int(time.time())
-            self.cur.execute(f"INSERT INTO comments (comment, post_name, timestamp) values ('{comment}', '{post}', '{timestamp}')")
+            self.cur.execute(f"INSERT INTO comments (comment, post_name, timestamp) values (\"{comment}\", \"{post}\", \"{timestamp}\")")
             self.con.commit() # required for committing the query to the db
 
             return 1
@@ -47,3 +48,5 @@ class Database:
             if e.args[0] == 1452:
                 print("Provided post_name doesn't exist!")
                 return 2
+        
+        return 3
