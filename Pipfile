@@ -8,8 +8,14 @@ pylint = "*"
 pymysql = "*"
 flask = "*"
 flask-limiter = "*"
+python-dotenv = "*"
 
 [packages]
+pymysql = "*"
+flask = "*"
+flask-limiter = "*"
+python-dotenv = "*"
+awsebcli = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.6"
