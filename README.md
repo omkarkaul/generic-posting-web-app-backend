@@ -6,6 +6,11 @@ Dependencies:
 - Python 3.7
 - Flask
 - PyMySQL
+- Flask Limiter
+- Python Dotenv
+- awsebcli
+
+Currently deployed to AWS using Beanstalk, EC2, and RDS. You can message me for the URL if you want to test this backend yourself before using this code in your own generic-posting web app. But, although rate limiting is in place, please don't spam it and cost me money on AWS :P.
 
 ## DB Tables
 
