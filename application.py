@@ -15,6 +15,11 @@ limiter = Limiter(
     default_limits=["100 per day"]
 )
 
+@application.route("/api", methods = ['GET'])
+@limiter.limit("20 per minute")
+def index():
+    return make_response("Welcome to the generic posting back-end service!", 200)
+
 @application.route("/api/posts", methods = ['GET'])
 @limiter.limit("3 per minute")
 def get_all_posts():
