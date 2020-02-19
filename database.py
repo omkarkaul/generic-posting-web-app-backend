@@ -4,10 +4,14 @@ import time
 
 class Database:
     def __init__(self):
-        host = os.getenv('host')
-        user = os.getenv('user')
-        password = os.getenv('password')
-        db = os.getenv('db')
+        # host = os.getenv('host')
+        # user = os.getenv('user')
+        # password = os.getenv('password')
+        # db = os.getenv('db')
+        host = os.environ.get('host', 'FAILED HOST')
+        user = os.environ.get('user', 'FAILED USER')
+        password = os.environ.get('password', 'FAILED password')
+        db = os.environ.get('db', 'FAILED db')
 
         self.con = pymysql.connect(host, user, password, db, cursorclass=pymysql.cursors.DictCursor)
         self.cur = self.con.cursor()
