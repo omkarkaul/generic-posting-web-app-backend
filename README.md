@@ -28,10 +28,10 @@ CREATE TABLE posts ( post VARCHAR(255) NOT NULL PRIMARY KEY, timestamp VARCHAR(1
 #### 'comments' table
 | Field     |    Type     | Null | Key | Default |
 |-----------|-------------|------|-----|---------|
-| comment   | varchar(512)| NO   | PRI | NULL    |
+| comment   | varchar(512)| NO   |     | NULL    |
 | post_name | varchar(255)| NO   | MUL | NULL    |
 | timestamp | varchar(12) | NO   |     | NULL    | 
 
 ```sql
-CREATE TABLE comments ( comment VARCHAR(512) NOT NULL PRIMARY KEY, post_name VARCHAR(255) NOT NULL, timestamp VARCHAR(12) NOT NULL, FOREIGN KEY (post_name) REFERENCES posts(post));
+CREATE TABLE comments ( comment VARCHAR(512) NOT NULL, post_name VARCHAR(255) NOT NULL, timestamp VARCHAR(12) NOT NULL, FOREIGN KEY (post_name) REFERENCES posts(post));
 ```
